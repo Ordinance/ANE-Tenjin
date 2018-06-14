@@ -1,4 +1,4 @@
-package io.voodoo.tenjin {
+﻿package io.voodoo.tenjin {
 	import flash.desktop.NativeApplication;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -16,6 +16,11 @@ package io.voodoo.tenjin {
 		
 		// FUNCTIONS :
 		private static const FN_INIT:String = "tenjin_init";
+		private static const FN_CONNECT:String = "tenjin_connect";
+		private static const FN_INIT_CONNECT:String = "tenjin_init_connect";
+		private static const FN_OPT_OUT:String = "tenjin_opt_out";
+		private static const FN_OPT_IN:String = "tenjin_opt_in";
+
 		private static const FN_APP_ACTIVATED:String = "tenjin_appActivated";
 		private static const FN_SEND_EVENT:String = "tenjin_sendEvent";
 		private static const FN_SEND_EVENT_WITH_VALUE:String = "tenjin_sendEventWithValue";
@@ -59,6 +64,67 @@ package io.voodoo.tenjin {
 			NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE, onActivate);
 			
 			log("Tenjin extension initialized (token : " + token + ").");
+		}
+		
+		/**
+		 * Initializes and sends "connect" call to Tenjin extension with the given token.
+		 * @param token Your Tenjin token.
+		 */
+		public static function initConnect(token:String):void {
+			if(!isSupported()) {
+				log("Unsupported platform. All calls will be ignored.");
+				return;
+			}
+			
+			context = ExtensionContext.createExtensionContext(EXTENSION_ID, "");
+			if(context == null)
+				return;
+			context.addEventListener(StatusEvent.STATUS, onNativeLog);
+			
+			context.call(FN_INIT_CONNECT, token);
+			
+			NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE, onActivate);
+			
+			log("Tenjin extension initialized and connect event sent (token : " + token + ").");
+		}
+		
+		/**
+		 * Sends the "connect" event to Tenjin.
+		 *
+		*/
+		public static function connect():void {
+			if(context == null)
+				return;
+						
+			log("Sending connect event to Tenjin");
+			context.call(FN_CONNECT);
+
+		}
+		
+		/**
+		 * For GDPR - Sends the opt out event to Tenjin.
+		 *
+		*/
+		public static function optOut():void {
+			if(context == null)
+				return;
+						
+			log("Setting opt out for user");
+			context.call(FN_OPT_OUT);
+
+		}
+		
+		/**
+		 * For GDPR - Sends the opt in event to Tenjin.
+		 *
+		*/
+		public static function optIn():void {
+			if(context == null)
+				return;
+						
+			log("Setting opt in for user");
+			context.call(FN_OPT_IN);
+
 		}
 		
 		/**

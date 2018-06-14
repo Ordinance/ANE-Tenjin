@@ -1,4 +1,4 @@
-package {
+﻿package {
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
@@ -27,6 +27,7 @@ package {
 			dy = 30;
 			
 			addButton("Init", initTenjin);
+			addButton("Connect", connect);
 			addButton("Send Event", sendEvent);
 			addButton("Send Event With Value", sendEventWithValue);
 			addButton("Transaction", transaction);
@@ -35,6 +36,11 @@ package {
 		private function initTenjin():void {
 			trace("Init");
 			Tenjin.init(TOKEN);
+		}
+		
+		private function connect():void {
+			trace("Connect");
+			Tenjin.connect();
 		}
 		
 		private function sendEvent():void {

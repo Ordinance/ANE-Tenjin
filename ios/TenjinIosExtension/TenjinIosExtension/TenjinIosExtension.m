@@ -19,13 +19,48 @@ FREObject tenjin_init(FREContext context, void* functionData, uint32_t argc, FRE
     [typeConverter FREGetObject:argv[0] asString:&token];
     
     NSLog(@"Initializing Tenjin extension with token : %@ ...", token);
+    [TenjinSDK init:token];
+    
+    return nil;
+}
+
+FREObject tenjin_init_connect(FREContext context, void* functionData, uint32_t argc, FREObject argv[])
+{
+    NSString* token;
+    [typeConverter FREGetObject:argv[0] asString:&token];
+    
+    NSLog(@"Initializing + connect Tenjin extension with token : %@ ...", token);
     [TenjinSDK sharedInstanceWithToken:token];
+    
+    return nil;
+}
+
+FREObject tenjin_connect(FREContext context, void* functionData, uint32_t argc)
+{
+    NSLog(@"Tenjin opt in");
+    [TenjinSDK connect];
     
     return nil;
 }
 
 FREObject tenjin_appActivated(FREContext context, void* functionData, uint32_t argc, FREObject argv[])
 {
+    return nil;
+}
+
+FREObject tenjin_opt_out(FREContext context, void* functionData, uint32_t argc)
+{
+    NSLog(@"Tenjin opt out");
+    [TenjinSDK optOut];
+
+    return nil;
+}
+
+FREObject tenjin_opt_in(FREContext context, void* functionData, uint32_t argc)
+{
+    NSLog(@"Tenjin opt in");
+    [TenjinSDK optIn];
+    
     return nil;
 }
 
@@ -87,9 +122,17 @@ void TenjinContextInitializer( void* extData, const uint8_t* ctxType, FREContext
     func[0].functionData = NULL;
     func[0].function = &tenjin_init;
     
-    func[1].name = (const uint8_t*) "tenjin_appActivated";
+    func[0].name = (const uint8_t*) "tenjin_init_connect";
+    func[0].functionData = NULL;
+    func[0].function = &tenjin_init_connect;
+    
+    func[0].name = (const uint8_t*) "tenjin_opt_out";
+    func[0].functionData = NULL;
+    func[0].function = &tenjin_opt_out;
+    
+    func[1].name = (const uint8_t*) "tenjin_opt_in";
     func[1].functionData = NULL;
-    func[1].function = &tenjin_appActivated;
+    func[1].function = &tenjin_opt_in;
     
     func[2].name = (const uint8_t*) "tenjin_sendEvent";
     func[2].functionData = NULL;

@@ -20,6 +20,10 @@ public class TenjinExtensionContext extends FREContext {
         Map<String, FREFunction> functions = new HashMap<>();
 
         functions.put("tenjin_init", new InitFunction());
+        functions.put("tenjin_init_connect", new InitConnectFunction());
+        functions.put("tenjin_connect", new ConnectFunction());
+        functions.put("tenjin_opt_out", new OptOutFunction());
+        functions.put("tenjin_opt_in", new OptInFunction());
         functions.put("tenjin_appActivated", new AppActivatedFunction());
         functions.put("tenjin_sendEvent", new SendEventFunction());
         functions.put("tenjin_sendEventWithValue", new SendEventWithValueFunction());
